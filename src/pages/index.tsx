@@ -1,85 +1,86 @@
 import * as React from 'react';
+import { Link, graphql, useStaticQuery } from 'gatsby';
 import styled from 'styled-components';
+import type { HeaderComponentQuery } from '../../types/graphql-types';
 
 // styles
-const pageStyles = {
-  color: '#232129',
-  padding: 96,
-  fontFamily: '-apple-system, Roboto, sans-serif, serif'
-};
+const PageStyles = styled.main`
+  color: #232129;
+  padding: 96px;
+  font-family: '-apple-system, Roboto, sans-serif, serif';
+`;
 const HeadingStyles = styled.h1`
   margin-top: 0;
   margin-bottom: 64px;
   max-width: 320px;
 `;
-const headingAccentStyles = {
-  color: '#663399'
-};
-const paragraphStyles = {
-  marginBottom: 48
-};
-const codeStyles = {
-  color: '#8A6534',
-  padding: 4,
-  backgroundColor: '#FFF4DB',
-  fontSize: '1.25rem',
-  borderRadius: 4
-};
-const listStyles = {
-  marginBottom: 96,
-  paddingLeft: 0
-};
-const listItemStyles = {
-  fontWeight: 300,
-  fontSize: 24,
-  maxWidth: 560,
-  marginBottom: 30
-};
+const HeadingAccentStyles = styled.span`
+  color: #663399;
+`;
+const ParagraphStyles = styled.p`
+  margin-bottom: 48px;
+`;
+const CodeStyles = styled.code`
+  color: #8a6534;
+  padding: 4px;
+  background-color: #fff4db;
+  font-size: 1.25rem;
+  border-radius: 4px;
+`;
+const ListStyles = styled.ul`
+  margin-bottom: 96px;
+  padding-left: 0;
+`;
+const ListItemStyles = styled.li`
+  font-weight: 300;
+  font-size: 24px;
+  max-width: 560px;
+  margin-bottom: 30px;
+`;
 
-const linkStyle = {
-  color: '#8954A8',
-  fontWeight: 'bold',
-  fontSize: 16,
-  verticalAlign: '5%'
-};
+const LinkStyle = styled.a`
+  color: #8954a8;
+  font-weight: bold;
+  font-size: 16px;
+  vertical-align: 5%;
+`;
 
-const docLinkStyle = {
-  ...linkStyle,
-  listStyleType: 'none',
-  marginBottom: 24
-};
+const DocLinkStyle = styled.li`
+  list-style-type: none;
+  margin-bottom: 24px;
+`;
 
-const descriptionStyle = {
-  color: '#232129',
-  fontSize: 14,
-  marginTop: 10,
-  marginBottom: 0,
-  lineHeight: 1.25
-};
+const DescriptionStyle = styled.p`
+  color: #232129;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  line-height: 1.25;
+`;
 
+const BadgeStyle = styled.span`
+  color: #fff;
+  background-color: #088413;
+  border: 1px solid #088413;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1;
+  border-radius: 4px;
+  padding: 4px 6px;
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  margin-left: 10px;
+  line-height: 1;
+`;
+
+// data
 const docLink = {
   text: 'Documentation',
   url: 'https://www.gatsbyjs.com/docs/',
   color: '#8954A8'
 };
 
-const badgeStyle = {
-  color: '#fff',
-  backgroundColor: '#088413',
-  border: '1px solid #088413',
-  fontSize: 11,
-  fontWeight: 'bold',
-  letterSpacing: 1,
-  borderRadius: 4,
-  padding: '4px 6px',
-  display: 'inline-block',
-  position: 'relative',
-  top: -2,
-  marginLeft: 10,
-  lineHeight: 1
-};
-
-// data
 const links = [
   {
     text: 'Tutorial',
@@ -127,66 +128,67 @@ const links = [
 ];
 
 // markup
-const IndexPage = () => {
+const IndexPage: React.FC = () => {
+  const data = useStaticQuery<HeaderComponentQuery>(graphql`
+    query HeaderComponent {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `);
+
   return (
-    <main style={pageStyles}>
+    <PageStyles>
       <title>Home Page</title>
       <HeadingStyles>
         Congratulations
         <br />
-        <span style={headingAccentStyles}>— you just made a Gatsby site! </span>
+        <HeadingAccentStyles>
+          — you just made a Gatsby site!{' '}
+        </HeadingAccentStyles>
         <span role="img" aria-label="Party popper emojis">
           🎉🎉🎉
         </span>
       </HeadingStyles>
-      {/* <h1 style={headingStyles}>
-        Congratulations
-        <br />
-        <span style={headingAccentStyles}>— you just made a Gatsby site! </span>
-        <span role="img" aria-label="Party popper emojis">
-          🎉🎉🎉
-        </span>
-      </h1> */}
-      <p style={paragraphStyles}>
-        Edit <code style={codeStyles}>src/pages/index.js</code> to see this page
-        update in real-time.{' '}
+      <Link to="/">{data.site?.siteMetadata?.title}</Link>
+      <ParagraphStyles>
+        Edit <CodeStyles>src/pages/index.js</CodeStyles> to see this page update
+        in real-time.{' '}
         <span role="img" aria-label="Sunglasses smiley emoji">
           😎
         </span>
-      </p>
-      <ul style={listStyles}>
-        <li style={docLinkStyle}>
-          <a
-            style={linkStyle}
+      </ParagraphStyles>
+      <ListStyles>
+        <DocLinkStyle>
+          <LinkStyle
             href={`${docLink.url}?utm_source=starter&utm_medium=start-page&utm_campaign=minimal-starter`}
           >
             {docLink.text}
-          </a>
-        </li>
+          </LinkStyle>
+        </DocLinkStyle>
         {links.map(link => (
-          <li key={link.url} style={{ ...listItemStyles, color: link.color }}>
+          <ListItemStyles key={link.url} style={{ color: link.color }}>
             <span>
               <a
-                style={linkStyle}
                 href={`${link.url}?utm_source=starter&utm_medium=start-page&utm_campaign=minimal-starter`}
               >
                 {link.text}
               </a>
               {link.badge && (
-                <span style={badgeStyle} aria-label="New Badge">
-                  NEW!
-                </span>
+                <BadgeStyle aria-label="New Badge">NEW!</BadgeStyle>
               )}
-              <p style={descriptionStyle}>{link.description}</p>
+              <DescriptionStyle>{link.description}</DescriptionStyle>
             </span>
-          </li>
+          </ListItemStyles>
         ))}
-      </ul>
+      </ListStyles>
       <img
         alt="Gatsby G Logo"
         src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
       />
-    </main>
+    </PageStyles>
   );
 };
 
